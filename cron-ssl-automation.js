@@ -152,7 +152,7 @@ async function processDomain(domainName) {
   }
 }
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 * * * *", async () => {
   const results = await connection.query("SELECT name FROM domain");
   for (const row of results) {
     processDomain(row.name);
