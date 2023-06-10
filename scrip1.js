@@ -2,6 +2,30 @@ const AWS = require("aws-sdk");
 const route53 = new AWS.Route53();
 const acm = new AWS.ACM();
 
+// This is a helper function that waits for a certain amount of time
+function delay(t, v) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve.bind(null, v), t);
+  });
+}
+
+// This is a helper function that checks the status of the domain registration
+async function waitForDomainRegistrationCompletion(domainName) {
+  while (true) {
+    const domainDetailsResponse = await route53
+      .getDomainDetail({ DomainName: domainName })
+      .promise();
+    console.log(
+      "Checking domain registration status:",
+      domainDetailsResponse.Status
+    );
+    if (domainDetailsResponse.Status === "ACTIVE") {
+      break;
+    }
+    await delay(30000); // wait for 30 seconds before checking again
+  }
+}
+
 async function registerAndSetupDomain() {
   const domainName = "example.com"; // Replace with your domain name
   const loadBalancerDNSName =
@@ -14,10 +38,14 @@ async function registerAndSetupDomain() {
     IdnLangCode: "en",
     AutoRenew: true,
   };
+  // Step 1: Register a new domain
   const domainRegistrationResponse = await route53
     .registerDomain(domainRegistrationParams)
     .promise();
   console.log("Domain registration initiated:", domainRegistrationResponse);
+
+  // Wait for domain registration to complete
+  await waitForDomainRegistrationCompletion(domainName);
 
   // Waiting for domain registration to complete could be tricky as there's no built-in waiter for this in AWS SDK.
   // You might need to implement a custom checking mechanism that periodically checks the status of the domain.
