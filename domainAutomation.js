@@ -30,7 +30,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 FirstName: "John",
                 LastName: "Doe",
                 State: "WA",
-                PhoneNumber: "+1.1234567890", // Include a valid phone number
+                PhoneNumber: "+1.1234567890",
                 ZipCode: "90210",
               },
               RegistrantContact: {
@@ -42,7 +42,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 FirstName: "John",
                 LastName: "Doe",
                 State: "WA",
-                PhoneNumber: "+1.9876543210", // Include a valid phone number
+                PhoneNumber: "+1.9876543210",
                 ZipCode: "10001",
               },
               TechContact: {
@@ -54,7 +54,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 FirstName: "John",
                 LastName: "Doe",
                 State: "WA",
-                PhoneNumber: "+1.1122334455", // Include a valid phone number
+                PhoneNumber: "+1.1122334455",
                 ZipCode: "60606",
               },
 
