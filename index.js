@@ -4,7 +4,7 @@ const {
   requestAndAssociateCertificate,
 } = require("./domainAutomation");
 
-const domainName = "occuluszap8.com";
+const domainName = "occuluszap10.com";
 const loadBalancerDNSName =
   "awseb-AWSEB-1HPC61L8II71Y-1353296702.eu-central-1.elb.amazonaws.com";
 const loadBalancerArn =

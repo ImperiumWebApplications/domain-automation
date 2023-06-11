@@ -1,13 +1,11 @@
 // Load the AWS SDK for Node.js
 var AWS = require("aws-sdk");
-// Set the region
-AWS.config.update({ region: "us-east-1" });
 
 // AWS service objects
-const route53domains = new AWS.Route53Domains();
-const route53 = new AWS.Route53();
-const ACM = new AWS.ACM();
-const ELBv2 = new AWS.ELBv2();
+const route53domains = new AWS.Route53Domains({ region: "us-east-1" });
+const route53 = new AWS.Route53({ region: "us-east-1" });
+const ACM = new AWS.ACM({ region: "eu-central-1" });
+const ELBv2 = new AWS.ELBv2({ region: "eu-central-1" });
 
 // First, check if the domain is available
 const checkAvailablityAndRegisterDomain = function (domainName) {
@@ -99,7 +97,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 }
 
                 // Wait for some time before starting to check the domain status
-                setTimeout(checkDomainStatus, 60000); // wait for 30 seconds
+                setTimeout(checkDomainStatus, 60000); // wait for 60 seconds
               }
             });
           } else {
@@ -111,7 +109,6 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
     );
   });
 };
-
 const configureARecord = function (domainName, loadBalancerDNSName) {
   return new Promise((resolve, reject) => {
     route53.listHostedZonesByName(
@@ -178,35 +175,6 @@ const requestAndAssociateCertificate = function (domainName, loadBalancerArn) {
         else {
           const certificateArn = data.CertificateArn;
           console.log("Certificate requested, ARN: " + certificateArn);
-
-          const checkCertificate = function () {
-            ACM.describeCertificate(
-              { CertificateArn: certificateArn },
-              function (err, data) {
-                if (err) reject(err); // an error occurred
-                else {
-                  if (
-                    data.Certificate &&
-                    data.Certificate.DomainValidationOptions &&
-                    data.Certificate.DomainValidationOptions[0] &&
-                    data.Certificate.DomainValidationOptions[0].ResourceRecord
-                  ) {
-                    const record =
-                      data.Certificate.DomainValidationOptions[0]
-                        .ResourceRecord;
-                    configureCNAMERecord(domainName, record.Name, record.Value);
-                  } else {
-                    // if the certificate is not yet ready, wait for some time and try again
-                    setTimeout(checkCertificate, 5000); // wait for 5 seconds
-                  }
-                }
-              }
-            );
-          };
-
-          // Start checking the certificate status
-          checkCertificate();
-
           setTimeout(function () {
             associateCertificateWithLoadBalancer(
               certificateArn,
@@ -221,10 +189,6 @@ const requestAndAssociateCertificate = function (domainName, loadBalancerArn) {
 };
 
 function associateCertificateWithLoadBalancer(certificateArn, loadBalancerArn) {
-  console.log("Inside associateCertificateWithLoadBalancer method");
-  console.log("certificateArn", certificateArn);
-  console.log("loadBalancerArn", loadBalancerArn);
-
   ELBv2.describeListeners(
     {
       LoadBalancerArn: loadBalancerArn,
@@ -250,56 +214,6 @@ function associateCertificateWithLoadBalancer(certificateArn, loadBalancerArn) {
     }
   );
 }
-
-const configureCNAMERecord = function (domainName, recordName, recordValue) {
-  route53.listHostedZonesByName(
-    {
-      DNSName: domainName,
-      MaxItems: "1",
-    },
-    function (err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else {
-        if (
-          data.HostedZones.length > 0 &&
-          data.HostedZones[0].Name === domainName + "."
-        ) {
-          var hostedZoneId = data.HostedZones[0].Id;
-
-          // change CNAME record for validation
-          var params = {
-            ChangeBatch: {
-              Changes: [
-                {
-                  Action: "UPSERT",
-                  ResourceRecordSet: {
-                    Name: recordName,
-                    Type: "CNAME",
-                    TTL: 300,
-                    ResourceRecords: [
-                      {
-                        Value: recordValue,
-                      },
-                    ],
-                  },
-                },
-              ],
-              Comment: "update CNAME record for validation",
-            },
-            HostedZoneId: hostedZoneId,
-          };
-          route53.changeResourceRecordSets(params, function (err, data) {
-            if (err) console.log(err, err.stack); // an error occurred
-            else console.log(data); // successful response
-          });
-        } else {
-          console.log("Inside configure CNAME records method");
-          console.log("No hosted zone found for domain: " + domainName);
-        }
-      }
-    }
-  );
-};
 
 module.exports = {
   checkAvailablityAndRegisterDomain,
