@@ -1,13 +1,10 @@
 // Load the AWS SDK for Node.js
 var AWS = require("aws-sdk");
-// Set the region
-AWS.config.update({ region: "us-east-1" });
 
-// AWS service objects
-const route53domains = new AWS.Route53Domains();
-const route53 = new AWS.Route53();
-const ACM = new AWS.ACM();
-const ELBv2 = new AWS.ELBv2();
+const route53domains = new AWS.Route53Domains({ region: "us-east-1" });
+const route53 = new AWS.Route53({ region: "us-east-1" });
+const ACM = new AWS.ACM({ region: "eu-central-1" });
+const ELBv2 = new AWS.ELBv2({ region: "eu-central-1" });
 
 // First, check if the domain is available
 const checkAvailablityAndRegisterDomain = function (domainName) {
