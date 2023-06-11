@@ -14,7 +14,6 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
       function (err, data) {
         if (err) reject(err); // an error occurred
         else {
-          console.log("data is", data);
           if (data.Availability == "AVAILABLE") {
             // The domain is available, register it
             var params = {
