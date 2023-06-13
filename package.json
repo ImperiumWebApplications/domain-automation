@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.1395.0"
+    "aws-sdk": "^2.1395.0",
+    "mysql2": "^3.3.5",
+    "node-cron": "^3.0.2"
   }
 }

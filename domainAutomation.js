@@ -95,7 +95,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 }
 
                 // Wait for some time before starting to check the domain status
-                setTimeout(checkDomainStatus, 60000); // wait for 30 seconds
+                setTimeout(checkDomainStatus, 60000); // wait for 60 seconds
               }
             });
           } else {

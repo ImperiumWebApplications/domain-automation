@@ -44,7 +44,7 @@ const processDomainNames = async () => {
   const [rows] = await connection.execute("SELECT * FROM domains_processing");
   for (let row of rows) {
     const domainName = row.domain_name;
-    const success = await runSequentially(domainName);
+    const success = await runSequentially("domainNameasdsad.com");
     if (success) {
       await connection.execute(
         "DELETE FROM domains_processing WHERE domain_name = ?",
