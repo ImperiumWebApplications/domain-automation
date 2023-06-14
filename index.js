@@ -33,6 +33,7 @@ const runSequentially = async (domainName) => {
     await requestAndAssociateCertificate(domainName, loadBalancerArn);
     return true;
   } catch (error) {
+    console.log("Error from runSequentially", error);
     console.error(error);
     return false;
   }
@@ -55,4 +56,4 @@ const processDomainNames = async () => {
   await connection.end();
 };
 
-cron.schedule("0 * * * *", processDomainNames);
+cron.schedule("* * * * *", processDomainNames);
