@@ -56,4 +56,4 @@ const processDomainNames = async () => {
   await connection.end();
 };
 
-cron.schedule("* * * * *", processDomainNames);
+cron.schedule("0 * * * *", processDomainNames);
