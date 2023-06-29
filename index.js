@@ -55,3 +55,4 @@ const processDomainNames = async () => {
   await connection.end();
 };
 
+processDomainNames();
