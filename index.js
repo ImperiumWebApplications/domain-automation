@@ -1,4 +1,3 @@
-const cron = require("node-cron");
 const mysql = require("mysql2/promise");
 const AWS = require("aws-sdk");
 const {
@@ -56,4 +55,3 @@ const processDomainNames = async () => {
   await connection.end();
 };
 
-cron.schedule("0 * * * *", processDomainNames);
