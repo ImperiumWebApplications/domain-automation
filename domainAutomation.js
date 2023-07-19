@@ -28,8 +28,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 Email: "info@leadquelle.net",
                 FirstName: "Dominik",
                 LastName: "Eisenhardt",
-                State: "Zug",
-                PhoneNumber: "+41415150800",
+                PhoneNumber: "+41.415150800",
                 ZipCode: "6300",
               },
               RegistrantContact: {
@@ -41,8 +40,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 Email: "info@leadquelle.net",
                 FirstName: "Dominik",
                 LastName: "Eisenhardt",
-                State: "Zug",
-                PhoneNumber: "+41415150800",
+                PhoneNumber: "+41.415150800",
                 ZipCode: "6300",
               },
               TechContact: {
@@ -54,8 +52,7 @@ const checkAvailablityAndRegisterDomain = function (domainName) {
                 Email: "info@leadquelle.net",
                 FirstName: "Dominik",
                 LastName: "Eisenhardt",
-                State: "Zug",
-                PhoneNumber: "+41415150800",
+                PhoneNumber: "+41.415150800",
                 ZipCode: "6300",
               },
 
